@@ -42,7 +42,7 @@ SET FOREIGN_KEY_CHECKS=1;
 # ---------------------------------------------- #
 CREATE TABLE `invoices` (
     `customer_ID` int(11),
-    `invoice_ID` int(11) NOT NULL, # auto increment?
+    `invoice_ID` int(11) NOT NULL AUTO_INCREMENT,
     `employee_ID` int(11),
     `payment_date_year` int(11) NOT NULL,
     `payment_date_month` int(11) NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE `invoices` (
 # Create table for product_inventory
 # ---------------------------------------------- #
 CREATE TABLE `product_inventory` (
-    `product_serial_number` int(11) NOT NULL,
+    `product_serial_number` int(11) NOT NULL AUTO_INCREMENT,
     `product_type` varchar(255) NOT NULL,
     `product_brand` varchar(255) NOT NULL,
     `product_year` int(11) NOT NULL,
@@ -134,6 +134,7 @@ CREATE TABLE `warehouse_inventory` (
 	`inventory_ID` int(11) NOT NULL AUTO_INCREMENT,
     `location_ID` int(11),
     `product_serial_number` int(11),
+    `stock_quantity` int(11),
    	PRIMARY KEY (`inventory_ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -175,7 +176,7 @@ ALTER TABLE customers
 # Employees
 # ---------------------------------------------- #
 ALTER TABLE employees
-    ADD CONSTRAINT FOREIGN KEY (location_ID)
+    ADD FOREIGN KEY (location_ID)
     REFERENCES warehouse_locations (location_ID)
     ON DELETE SET NULL
     ON UPDATE CASCADE;
@@ -184,13 +185,13 @@ ALTER TABLE employees
 # Invoices
 # ---------------------------------------------- #
 ALTER TABLE invoices
-    ADD CONSTRAINT FOREIGN KEY (customer_ID) 
+    ADD FOREIGN KEY (customer_ID) 
     REFERENCES customers (customer_ID)
     ON DELETE SET NULL
     ON UPDATE CASCADE;
 
 ALTER TABLE invoices
-    ADD CONSTRAINT FOREIGN KEY (employee_ID) 
+    ADD FOREIGN KEY (employee_ID) 
     REFERENCES employees (employee_ID)
     ON DELETE SET NULL
     ON UPDATE CASCADE;
@@ -199,13 +200,13 @@ ALTER TABLE invoices
 # Orders
 # ---------------------------------------------- #
 ALTER TABLE orders
-    ADD CONSTRAINT FOREIGN KEY (invoice_ID)
+    ADD FOREIGN KEY (invoice_ID)
     REFERENCES invoices (invoice_ID)
     ON DELETE SET NULL
     ON UPDATE CASCADE;
 
 ALTER TABLE orders
-    ADD CONSTRAINT FOREIGN KEY (product_serial_number)
+    ADD FOREIGN KEY (product_serial_number)
     REFERENCES product_inventory (product_serial_number)
     ON DELETE SET NULL
     ON UPDATE CASCADE;
@@ -214,13 +215,13 @@ ALTER TABLE orders
 # Warehouse Inventory
 # ---------------------------------------------- #
 ALTER TABLE warehouse_inventory
-    ADD CONSTRAINT FOREIGN KEY (location_ID)
+    ADD FOREIGN KEY (location_ID)
     REFERENCES warehouse_locations (location_ID)
     ON DELETE SET NULL
     ON UPDATE CASCADE;
 
 ALTER TABLE warehouse_inventory
-    ADD CONSTRAINT FOREIGN KEY (product_serial_number)
+    ADD FOREIGN KEY (product_serial_number)
     REFERENCES product_inventory (product_serial_number)
     ON DELETE CASCADE
     ON UPDATE CASCADE;
@@ -253,7 +254,7 @@ INSERT INTO product_inventory(`product_serial_number`, `product_type`, `product_
 # ---------------------------------------------- #
 INSERT INTO warehouse_inventory (location_ID, product_serial_number) 
     VALUES 
-    (1, 1010),  
+    (1, 1010),
     (2, 1234),
     (1, 2345);
 
